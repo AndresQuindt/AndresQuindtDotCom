@@ -1,0 +1,55 @@
+---
+import type { Language, PageStructure } from "@/config/pages/types";
+import { getSectionTranslation } from "@/i18n/utils";
+
+import MenuToggle from "@/components/navigation/MenuToggle.astro";
+import NavOverlay from "@/components/navigation/NavOverlay.astro";
+import About from "@/components/sections/About.astro";
+import ExperienceTimeline from "@/components/sections/ExperienceTimeline.astro";
+import Footer from "@/components/sections/Footer.astro";
+import Hero from "@/components/sections/Hero.astro";
+import SkillsGrid from "@/components/sections/SkillsGrid.astro";
+
+interface Props {
+    structure: PageStructure;
+    lang: Language;
+}
+
+const { structure, lang } = Astro.props;
+
+const componentRegistry: Record<string, any> = {
+    Hero,
+    About,
+    SkillsGrid,
+    ExperienceTimeline,
+    Footer,
+    MenuToggle,
+    NavOverlay,
+};
+---
+
+{
+    structure.map((section) => {
+        const Component = componentRegistry[section.componentName];
+
+        if (!Component) {
+            console.error(
+                `Component ${section.componentName} not found in registry`,
+            );
+            return null;
+        }
+
+        const translations = getSectionTranslation(
+            section.translationKey,
+            lang,
+        );
+
+        return (
+            <Component
+                lang={lang}
+                translations={translations}
+                {...section.props}
+            />
+        );
+    })
+}

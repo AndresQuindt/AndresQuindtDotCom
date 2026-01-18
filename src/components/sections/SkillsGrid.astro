@@ -1,0 +1,66 @@
+---
+import IconAI from "@/components/icons/IconAI.astro";
+import IconLeadership from "@/components/icons/IconLeadership.astro";
+import IconTechStack from "@/components/icons/IconTechStack.astro";
+import type { SectionProps } from "@/config/pages/types";
+import type { SkillsTranslations } from "@/i18n/types";
+
+interface Props extends SectionProps<SkillsTranslations> {}
+
+const { translations } = Astro.props;
+
+const iconRegistry = {
+    ai: IconAI,
+    leadership: IconLeadership,
+    techStack: IconTechStack,
+};
+---
+
+<section id="skills" class="border-t border-zinc-800 px-6 py-16 md:py-32">
+    <div class="max-w-6xl mx-auto">
+        <div class="observe-fade mb-8 md:mb-16">
+            <span
+                class="font-mono text-xs text-amber-600 tracking-wider uppercase mb-4 block"
+            >
+                {translations.label}
+            </span>
+            <h2 class="text-4xl md:text-5xl font-bold tracking-tight">
+                {translations.title}
+            </h2>
+        </div>
+
+        <div
+            class="observe-fade grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+        >
+            {
+                translations.modules.map((module) => {
+                    const IconComponent = iconRegistry[module.iconName];
+
+                    return (
+                        <div class="group border border-zinc-800 bg-zinc-900/50 p-8 hover:border-amber-500/50 hover:bg-zinc-900/80 hover:scale-[1.02] hover:shadow-xl hover:shadow-amber-600/10 transition-all duration-300">
+                            <div class="flex items-start justify-between mb-6">
+                                <div class="w-12 h-12 border border-zinc-700 group-hover:border-amber-600 flex items-center justify-center transition-colors duration-300">
+                                    <IconComponent />
+                                </div>
+                                <span class="font-mono text-xs text-zinc-600">
+                                    {module.id}
+                                </span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-zinc-100 mb-4">
+                                {module.title}
+                            </h3>
+                            <ul class="text-base text-zinc-400 space-y-3 leading-relaxed">
+                                {module.items.map((item) => (
+                                    <li class="flex items-center gap-2">
+                                        <span class="w-1 h-1 bg-amber-600 rounded-full" />
+                                        {item}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    );
+                })
+            }
+        </div>
+    </div>
+</section>
